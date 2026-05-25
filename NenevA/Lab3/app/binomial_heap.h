@@ -5,7 +5,8 @@
 #include <stdexcept>
 
 template <typename ValueType>
-struct Node {
+struct Node 
+{
   Node() : key(ValueType()), parent(nullptr), left_child(nullptr),
            sibling(nullptr), degree(0) {}
   
@@ -20,7 +21,8 @@ struct Node {
 };
 
 template <typename ValueType>
-class BinomialHeap {
+class BinomialHeap 
+{
  public:
   BinomialHeap();
   explicit BinomialHeap(ValueType key);
@@ -29,6 +31,7 @@ class BinomialHeap {
   ~BinomialHeap();
 
   void Merge(BinomialHeap& other);
+  // Merges with a binomial heap containing only one element
   void Insert(ValueType key);
   void DecreaseKey(Node<ValueType>* node, ValueType key);
   void Delete(Node<ValueType>* node);
@@ -40,6 +43,7 @@ class BinomialHeap {
  private:
   Node<ValueType>* head_;
 
+  // In order to ease Merge
   void LinkTrees(Node<ValueType>* parent, Node<ValueType>* child);
   void Clear();
   Node<ValueType>* CopyTree(Node<ValueType>* node, Node<ValueType>* parent);
@@ -54,17 +58,23 @@ template <typename ValueType>
 BinomialHeap<ValueType>::BinomialHeap(ValueType key) : head_(new Node<ValueType>(key)) {}
 
 template <typename ValueType>
-BinomialHeap<ValueType>::BinomialHeap(const BinomialHeap& other) : head_(nullptr) {
-  if (!other.IsEmpty()) {
+BinomialHeap<ValueType>::BinomialHeap(const BinomialHeap& other) : 
+    head_(nullptr) 
+{
+  if (!other.IsEmpty()) 
+  {
     head_ = CopyTree(other.head_, nullptr);
   }
 }
 
 template <typename ValueType>
-BinomialHeap<ValueType>& BinomialHeap<ValueType>::operator=(const BinomialHeap& other) {
-  if (this != &other) {
+BinomialHeap<ValueType>& BinomialHeap<ValueType>::operator=(const BinomialHeap& other) 
+{
+  if (this != &other) 
+  {
     Clear();
-    if (!other.IsEmpty()) {
+    if (!other.IsEmpty()) 
+    {
       head_ = CopyTree(other.head_, nullptr);
     }
   }
@@ -72,22 +82,26 @@ BinomialHeap<ValueType>& BinomialHeap<ValueType>::operator=(const BinomialHeap& 
 }
 
 template <typename ValueType>
-BinomialHeap<ValueType>::~BinomialHeap() {
+BinomialHeap<ValueType>::~BinomialHeap() 
+{
   Clear();
 }
 
 // ==================== Private Methods ====================
 
 template <typename ValueType>
-void BinomialHeap<ValueType>::Clear() {
-  while (!IsEmpty()) {
+void BinomialHeap<ValueType>::Clear() 
+{
+  while (!IsEmpty()) 
+  {
     ExtractMin();
   }
 }
 
 template <typename ValueType>
 Node<ValueType>* BinomialHeap<ValueType>::CopyTree(Node<ValueType>* node,
-                                                    Node<ValueType>* parent) {
+                                                    Node<ValueType>* parent) 
+{
   if (node == nullptr) return nullptr;
 
   Node<ValueType>* new_node = new Node<ValueType>(node->key);
@@ -101,7 +115,8 @@ Node<ValueType>* BinomialHeap<ValueType>::CopyTree(Node<ValueType>* node,
 
 template <typename ValueType>
 void BinomialHeap<ValueType>::LinkTrees(Node<ValueType>* parent,
-                                         Node<ValueType>* child) {
+                                         Node<ValueType>* child) 
+{
   child->parent = parent;
   child->sibling = parent->left_child;
   parent->left_child = child;
@@ -111,9 +126,14 @@ void BinomialHeap<ValueType>::LinkTrees(Node<ValueType>* parent,
 // ==================== Public Methods ====================
 
 template <typename ValueType>
-void BinomialHeap<ValueType>::Merge(BinomialHeap& other) {
-  if (other.IsEmpty()) return;
-  if (IsEmpty()) {
+void BinomialHeap<ValueType>::Merge(BinomialHeap& other) 
+{
+  if (other.IsEmpty())
+  {
+    return;
+  }
+  if (IsEmpty()) 
+  {
     head_ = other.head_;
     other.head_ = nullptr;
     return;
@@ -126,11 +146,15 @@ void BinomialHeap<ValueType>::Merge(BinomialHeap& other) {
   Node<ValueType>* b = other.head_;
 
   // Merge two root lists by degree
-  while (a != nullptr && b != nullptr) {
-    if (a->degree <= b->degree) {
+  while (a != nullptr && b != nullptr) 
+  {
+    if (a->degree <= b->degree) 
+    {
       tail->sibling = a;
       a = a->sibling;
-    } else {
+    } 
+    else 
+    {
       tail->sibling = b;
       b = b->sibling;
     }
@@ -142,26 +166,38 @@ void BinomialHeap<ValueType>::Merge(BinomialHeap& other) {
   head_ = temp.sibling;
   other.head_ = nullptr;
 
-  if (head_ == nullptr) return;
-
+  if (head_ == nullptr)
+  {
+    return;
+  }
   // Consolidate trees with the same degree
   Node<ValueType>* prev = nullptr;
   Node<ValueType>* current = head_;
   Node<ValueType>* next = current->sibling;
 
-  while (next != nullptr) {
+  while (next != nullptr) 
+  {
     if (current->degree != next->degree ||
-        (next->sibling != nullptr && next->sibling->degree == current->degree)) {
+        (next->sibling != nullptr && next->sibling->degree == current->degree)) 
+    {
       prev = current;
       current = next;
-    } else {
-      if (current->key <= next->key) {
+    } 
+    else 
+    {
+      if (current->key <= next->key) 
+      {
         current->sibling = next->sibling;
         LinkTrees(current, next);
-      } else {
-        if (prev == nullptr) {
+      } 
+      else 
+      {
+        if (prev == nullptr) 
+        {
           head_ = next;
-        } else {
+        } 
+        else 
+        {
           prev->sibling = next;
         }
         LinkTrees(next, current);
@@ -173,14 +209,17 @@ void BinomialHeap<ValueType>::Merge(BinomialHeap& other) {
 }
 
 template <typename ValueType>
-void BinomialHeap<ValueType>::Insert(ValueType key) {
+void BinomialHeap<ValueType>::Insert(ValueType key) 
+{
   BinomialHeap temp(key);
   Merge(temp);
 }
 
 template <typename ValueType>
-void BinomialHeap<ValueType>::DecreaseKey(Node<ValueType>* node, ValueType key) {
-  if (key > node->key) {
+void BinomialHeap<ValueType>::DecreaseKey(Node<ValueType>* node, ValueType key) 
+{
+  if (key > node->key) 
+  {
     throw std::runtime_error("New key is greater than current key");
   }
   
@@ -188,7 +227,8 @@ void BinomialHeap<ValueType>::DecreaseKey(Node<ValueType>* node, ValueType key) 
   Node<ValueType>* y = node;
   Node<ValueType>* z = y->parent;
   
-  while (z != nullptr && y->key < z->key) {
+  while (z != nullptr && y->key < z->key) 
+  {
     std::swap(y->key, z->key);
     y = z;
     z = y->parent;
@@ -196,20 +236,24 @@ void BinomialHeap<ValueType>::DecreaseKey(Node<ValueType>* node, ValueType key) 
 }
 
 template <typename ValueType>
-void BinomialHeap<ValueType>::Delete(Node<ValueType>* node) {
+void BinomialHeap<ValueType>::Delete(Node<ValueType>* node) 
+{
   if (node == nullptr) return;
   DecreaseKey(node, std::numeric_limits<ValueType>::min());
   ExtractMin();
 }
 
 template <typename ValueType>
-bool BinomialHeap<ValueType>::IsEmpty() const {
+bool BinomialHeap<ValueType>::IsEmpty() const 
+{
   return head_ == nullptr;
 }
 
 template <typename ValueType>
-ValueType BinomialHeap<ValueType>::ExtractMin() {
-  if (IsEmpty()) {
+ValueType BinomialHeap<ValueType>::ExtractMin() 
+{
+  if (IsEmpty()) 
+  {
     throw std::runtime_error("Heap is empty");
   }
 
@@ -219,8 +263,10 @@ ValueType BinomialHeap<ValueType>::ExtractMin() {
   Node<ValueType>* prev = nullptr;
   Node<ValueType>* current = head_;
 
-  while (current->sibling != nullptr) {
-    if (current->sibling->key < min_node->key) {
+  while (current->sibling != nullptr)
+  {
+    if (current->sibling->key < min_node->key)
+    {
       min_prev = current;
       min_node = current->sibling;
     }
@@ -228,16 +274,20 @@ ValueType BinomialHeap<ValueType>::ExtractMin() {
   }
 
   // Remove min_node from root list
-  if (min_prev == nullptr) {
+  if (min_prev == nullptr) 
+  {
     head_ = min_node->sibling;
-  } else {
+  } 
+  else
+  {
     min_prev->sibling = min_node->sibling;
   }
 
   // Create new heap from children of min_node
   BinomialHeap child_heap;
   Node<ValueType>* child = min_node->left_child;
-  while (child != nullptr) {
+  while (child != nullptr) 
+  {
     Node<ValueType>* next = child->sibling;
     child->sibling = child_heap.head_;
     child->parent = nullptr;
@@ -253,14 +303,17 @@ ValueType BinomialHeap<ValueType>::ExtractMin() {
 }
 
 template <typename ValueType>
-Node<ValueType>* BinomialHeap<ValueType>::GetMin() const {
+Node<ValueType>* BinomialHeap<ValueType>::GetMin() const 
+{
   if (IsEmpty()) return nullptr;
 
   Node<ValueType>* min_node = head_;
   Node<ValueType>* current = head_->sibling;
   
-  while (current != nullptr) {
-    if (current->key < min_node->key) {
+  while (current != nullptr) 
+  {
+    if (current->key < min_node->key) 
+    {
       min_node = current;
     }
     current = current->sibling;

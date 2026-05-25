@@ -1,5 +1,7 @@
 #pragma once
-struct VertexDistance { // In an separate file as it's used both in graph.cpp and adjacency_list.cpp 
+struct VertexDistance 
+{ // In an separate file as it's used both in graph.cpp and adjacency_list.cpp 
+  // Struct for Dijkstra algorithm
   int vertex;
   double distance;
   VertexDistance() : vertex(-1), distance(std::numeric_limits<double>::max()) {}
@@ -10,7 +12,8 @@ struct VertexDistance { // In an separate file as it's used both in graph.cpp an
   bool operator>=(const VertexDistance& other) const { return distance >= other.distance; }
 };
 
-struct Edge {
+struct Edge 
+{
   int vertex_number_;
   double distance_;
 };

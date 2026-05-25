@@ -10,23 +10,27 @@
 
 //AdjacencyList Tests
 
-TEST(AdjacencyListTest, DijkstraConsistency) {
+TEST(AdjacencyListTest, DijkstraConsistency) 
+{
   AdjacencyList graph;
   graph.GenerateRandomConnectedGraph(15, 0.4, 100);
   int n = graph.GetVerticesCount();
   
-  for (int start = 0; start < n; ++start) {
+  for (int start = 0; start < n; ++start) 
+  {
     auto distances_binary = graph.Dijkstra(start);
     auto distances_binomial = graph.DijkstraBinomial(start);
     
     ASSERT_EQ(distances_binary.size(), distances_binomial.size());
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) 
+    {
       EXPECT_DOUBLE_EQ(distances_binary[i], distances_binomial[i]);
     }
   }
 }
 
-TEST(AdjacencyListTest, FixedGraph) {
+TEST(AdjacencyListTest, FixedGraph) 
+{
   AdjacencyList graph(4);
   graph.AddEdge(0, 1, 10.0);
   graph.AddEdge(1, 2, 20.0);
@@ -47,7 +51,8 @@ TEST(AdjacencyListTest, FixedGraph) {
   EXPECT_DOUBLE_EQ(distances_binomial[3], 15.0);
 }
 
-TEST(AdjacencyListTest, SingleVertex) {
+TEST(AdjacencyListTest, SingleVertex) 
+{
   AdjacencyList graph(1);
   
   auto distances_binary = graph.Dijkstra(0);
@@ -58,14 +63,16 @@ TEST(AdjacencyListTest, SingleVertex) {
   EXPECT_DOUBLE_EQ(distances_binomial[0], 0.0);
 }
 
-TEST(AdjacencyListTest, EmptyGraph) {
+TEST(AdjacencyListTest, EmptyGraph) 
+{
   AdjacencyList graph;
   EXPECT_TRUE(graph.IsEmpty());
   EXPECT_EQ(graph.GetVerticesCount(), 0);
   EXPECT_EQ(graph.GetEdgesCount(), 0);
 }
 
-TEST(AdjacencyListTest, AddAndRemoveEdges) {
+TEST(AdjacencyListTest, AddAndRemoveEdges) 
+{
   AdjacencyList graph(3);
   graph.AddEdge(0, 1, 5.0);
   graph.AddEdge(1, 2, 10.0);
@@ -82,23 +89,27 @@ TEST(AdjacencyListTest, AddAndRemoveEdges) {
 
 //Graph (Matrix) Tests
 
-TEST(GraphTest, DijkstraConsistency) {
+TEST(GraphTest, DijkstraConsistency)
+{
   Graph graph;
   graph.GenerateRandomConnectedGraph(15, 0.4, 100);
   int n = graph.GetVerticesCount();
   
-  for (int start = 0; start < n; ++start) {
+  for (int start = 0; start < n; ++start)
+  {
     auto distances_binary = graph.Dijkstra(start);
     auto distances_binomial = graph.DijkstraBinomial(start);
     
     ASSERT_EQ(distances_binary.size(), distances_binomial.size());
-    for (int i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) 
+    {
       EXPECT_DOUBLE_EQ(distances_binary[i], distances_binomial[i]);
     }
   }
 }
 
-TEST(GraphTest, FixedGraph) {
+TEST(GraphTest, FixedGraph) 
+{
   Graph graph(4);
   graph.AddEdge(1, 2, 10.0);
   graph.AddEdge(2, 3, 20.0);
@@ -119,7 +130,8 @@ TEST(GraphTest, FixedGraph) {
   EXPECT_DOUBLE_EQ(distances_binomial[3], 15.0);
 }
 
-TEST(GraphTest, SingleVertex) {
+TEST(GraphTest, SingleVertex)
+{
   Graph graph(1);
   
   auto distances_binary = graph.Dijkstra(0);
@@ -130,14 +142,16 @@ TEST(GraphTest, SingleVertex) {
   EXPECT_DOUBLE_EQ(distances_binomial[0], 0.0);
 }
 
-TEST(GraphTest, EmptyGraph) {
+TEST(GraphTest, EmptyGraph)
+{
   Graph graph;
   EXPECT_TRUE(graph.IsEmpty());
   EXPECT_EQ(graph.GetVerticesCount(), 0);
   EXPECT_EQ(graph.GetEdgesCount(), 0);
 }
 
-TEST(GraphTest, AddAndRemoveEdges) {
+TEST(GraphTest, AddAndRemoveEdges)
+{
   Graph graph(3);
   graph.AddEdge(1, 2, 5.0);
   graph.AddEdge(2, 3, 10.0);
@@ -154,7 +168,8 @@ TEST(GraphTest, AddAndRemoveEdges) {
 
 //Binary Heap Tests
 
-TEST(BinaryHeapTest, InsertAndExtractMin) {
+TEST(BinaryHeapTest, InsertAndExtractMin)
+{
   BinaryHeap<int> heap;
   heap.Insert(5);
   heap.Insert(3);
@@ -170,7 +185,8 @@ TEST(BinaryHeapTest, InsertAndExtractMin) {
   EXPECT_TRUE(heap.IsEmpty());
 }
 
-TEST(BinaryHeapTest, InsertDuplicateValues) {
+TEST(BinaryHeapTest, InsertDuplicateValues)
+{
   BinaryHeap<int> heap;
   heap.Insert(5);
   heap.Insert(5);
@@ -185,7 +201,8 @@ TEST(BinaryHeapTest, InsertDuplicateValues) {
   EXPECT_EQ(heap.ExtractMin(), 5);
 }
 
-TEST(BinaryHeapTest, WithVertexDistance) {
+TEST(BinaryHeapTest, WithVertexDistance)
+{
   BinaryHeap<VertexDistance> heap;
   heap.Insert(VertexDistance(0, 10.0));
   heap.Insert(VertexDistance(1, 5.0));
@@ -199,7 +216,8 @@ TEST(BinaryHeapTest, WithVertexDistance) {
 }
 //Binomial Heap Tests
 
-TEST(BinomialHeapTest, InsertAndExtractMin) {
+TEST(BinomialHeapTest, InsertAndExtractMin)
+{
   BinomialHeap<int> heap;
   heap.Insert(5);
   heap.Insert(3);
@@ -214,7 +232,8 @@ TEST(BinomialHeapTest, InsertAndExtractMin) {
   EXPECT_EQ(heap.ExtractMin(), 8);
   EXPECT_TRUE(heap.IsEmpty());
 }
-TEST(BinomialHeapTest, InsertDuplicateValues) {
+TEST(BinomialHeapTest, InsertDuplicateValues)
+{
   BinomialHeap<int> heap;
   heap.Insert(5);
   heap.Insert(5);
@@ -229,7 +248,8 @@ TEST(BinomialHeapTest, InsertDuplicateValues) {
   EXPECT_EQ(heap.ExtractMin(), 5);
 }
 
-TEST(BinomialHeapTest, WithVertexDistance) {
+TEST(BinomialHeapTest, WithVertexDistance)
+{
   BinomialHeap<VertexDistance> heap;
   heap.Insert(VertexDistance(0, 10.0));
   heap.Insert(VertexDistance(1, 5.0));
@@ -242,7 +262,8 @@ TEST(BinomialHeapTest, WithVertexDistance) {
   EXPECT_EQ(heap.ExtractMin().distance, 15.0);
 }
 
-TEST(BinomialHeapTest, MergeHeaps) {
+TEST(BinomialHeapTest, MergeHeaps)
+{
   BinomialHeap<int> heap1;
   heap1.Insert(5);
   heap1.Insert(3);
@@ -265,7 +286,8 @@ TEST(BinomialHeapTest, MergeHeaps) {
 
 // Cross-Validation Tests
 
-TEST(CrossValidationTest, MatrixVsListConsistency) {
+TEST(CrossValidationTest, MatrixVsListConsistency)
+{
   const int kNumVertices = 20;
   const double kDensity = 0.3;
   const double kMaxWeight = 100;
@@ -287,7 +309,8 @@ TEST(CrossValidationTest, MatrixVsListConsistency) {
   }
 }
 
-TEST(CrossValidationTest, BinaryVsBinomialHeapOnSameGraph) {
+TEST(CrossValidationTest, BinaryVsBinomialHeapOnSameGraph) 
+{
   const int kNumVertices = 30;
   const double kDensity = 0.4;
   const double kMaxWeight = 100;
@@ -300,14 +323,16 @@ TEST(CrossValidationTest, BinaryVsBinomialHeapOnSameGraph) {
   auto binary_distances = graph.Dijkstra(start);
   auto binomial_distances = graph.DijkstraBinomial(start);
   
-  for (int i = 0; i < kNumVertices; ++i) {
+  for (int i = 0; i < kNumVertices; ++i) 
+  {
     EXPECT_DOUBLE_EQ(binary_distances[i], binomial_distances[i]);
   }
 }
 
 //Edge Case Tests 
 
-TEST(EdgeCaseTest, GraphWithZeroWeightEdges) {
+TEST(EdgeCaseTest, GraphWithZeroWeightEdges)
+{
   Graph graph(3);
   graph.AddEdge(1, 2, 0.0);
   graph.AddEdge(2, 3, 5.0);
@@ -318,7 +343,8 @@ TEST(EdgeCaseTest, GraphWithZeroWeightEdges) {
   EXPECT_DOUBLE_EQ(distances[2], 5.0);
 }
 
-TEST(EdgeCaseTest, DisconnectedGraphThrowsException) {
+TEST(EdgeCaseTest, DisconnectedGraphThrowsException)
+{
   Graph graph(3);
   graph.AddEdge(1, 2, 5.0);
   // Vertex 3 is isolated
@@ -327,7 +353,8 @@ TEST(EdgeCaseTest, DisconnectedGraphThrowsException) {
   EXPECT_ANY_THROW(graph.DijkstraBinomial(0));
 }
 
-TEST(EdgeCaseTest, InvalidStartVertexThrowsException) {
+TEST(EdgeCaseTest, InvalidStartVertexThrowsException) 
+{
   Graph graph(3);
   graph.GenerateRandomConnectedGraph(3, 0.5, 100);
   

@@ -7,8 +7,9 @@
 #include "graph.h"
 #include "adjacency_list.h"
 
-class GraphApplication {
- public:
+class GraphApplication 
+{
+public:
   void Run();
 
  private:
@@ -42,14 +43,16 @@ class GraphApplication {
   void ShowMenu() const;
 };
 
-void GraphApplication::ClearGraphs() {
+void GraphApplication::ClearGraphs() 
+{
   matrix_graph_.reset();
   list_graph_.reset();
   algorithm_run_ = false;
   start_vertex_ = -1;
 }
 
-void GraphApplication::CreateGraph(int size) {
+void GraphApplication::CreateGraph(int size) 
+{
   if (current_graph_type_ == GraphType::kMatrix) {
     matrix_graph_ = std::make_unique<Graph>(size);
     std::cout << "Created matrix-based graph with " << size << " vertices\n";
@@ -61,7 +64,8 @@ void GraphApplication::CreateGraph(int size) {
   algorithm_run_ = false;
 }
 
-void GraphApplication::GenerateRandomGraph() {
+void GraphApplication::GenerateRandomGraph() 
+{
   int vertices;
   double density;
   double max_weight;
@@ -73,14 +77,19 @@ void GraphApplication::GenerateRandomGraph() {
   std::cout << "Enter maximum weight: ";
   std::cin >> max_weight;
 
-  if (current_graph_type_ == GraphType::kMatrix) {
-    if (!matrix_graph_) {
+  if (current_graph_type_ == GraphType::kMatrix) 
+  {
+    if (!matrix_graph_) 
+    {
       matrix_graph_ = std::make_unique<Graph>();
     }
     matrix_graph_->GenerateRandomConnectedGraph(vertices, density, max_weight);
     std::cout << "Random connected graph generated\n";
-  } else {
-    if (!list_graph_) {
+  } 
+  else 
+  {
+    if (!list_graph_) 
+    {
       list_graph_ = std::make_unique<AdjacencyList>();
     }
     list_graph_->GenerateRandomConnectedGraph(vertices, density, max_weight);
@@ -89,7 +98,8 @@ void GraphApplication::GenerateRandomGraph() {
   algorithm_run_ = false;
 }
 
-void GraphApplication::AddEdge() {
+void GraphApplication::AddEdge() 
+{
   int from;
   int to;
   double weight;
@@ -101,14 +111,18 @@ void GraphApplication::AddEdge() {
   std::cout << "Enter weight: ";
   std::cin >> weight;
 
-  try {
-    if (current_graph_type_ == GraphType::kMatrix) {
-      if (!matrix_graph_) {
+  try 
+  {
+    if (current_graph_type_ == GraphType::kMatrix)
+    {
+      if (!matrix_graph_) 
+      {
         matrix_graph_ = std::make_unique<Graph>();
       }
       matrix_graph_->AddEdge(from, to, weight);
     } else {
-      if (!list_graph_) {
+      if (!list_graph_) 
+      {
         list_graph_ = std::make_unique<AdjacencyList>();
       }
       list_graph_->AddEdge(from - 1, to - 1, weight);
@@ -120,12 +134,15 @@ void GraphApplication::AddEdge() {
   }
 }
 
-void GraphApplication::RunDijkstra() {
-  if (current_graph_type_ == GraphType::kMatrix && !matrix_graph_) {
+void GraphApplication::RunDijkstra() 
+{
+  if (current_graph_type_ == GraphType::kMatrix && !matrix_graph_) 
+  {
     std::cout << "No graph created yet!\n";
     return;
   }
-  if (current_graph_type_ == GraphType::kList && !list_graph_) {
+  if (current_graph_type_ == GraphType::kList && !list_graph_) 
+  {
     std::cout << "No graph created yet!\n";
     return;
   }
@@ -138,13 +155,15 @@ void GraphApplication::RunDijkstra() {
                          ? matrix_graph_->GetVerticesCount()
                          : list_graph_->GetVerticesCount();
 
-  if (start_vertex_ < 0 || start_vertex_ >= vertex_count) {
+  if (start_vertex_ < 0 || start_vertex_ >= vertex_count) 
+  {
     std::cout << "Invalid start vertex!\n";
     return;
   }
 
   try {
-    if (current_heap_type_ == HeapType::kBinary) {
+    if (current_heap_type_ == HeapType::kBinary) 
+    {
       std::cout << "Running Dijkstra with Binary Heap...\n";
       if (current_graph_type_ == GraphType::kMatrix) {
         last_distances_ = matrix_graph_->Dijkstra(start_vertex_);
@@ -167,7 +186,8 @@ void GraphApplication::RunDijkstra() {
   }
 }
 
-void GraphApplication::QueryShortestPath() {
+void GraphApplication::QueryShortestPath() 
+{
   if (!algorithm_run_) {
     std::cout << "Please run Dijkstra algorithm first!\n";
     return;
@@ -179,12 +199,14 @@ void GraphApplication::QueryShortestPath() {
   target_vertex--;
 
   if (target_vertex < 0 ||
-      target_vertex >= static_cast<int>(last_distances_.size())) {
+      target_vertex >= static_cast<int>(last_distances_.size())) 
+  {
     std::cout << "Invalid vertex!\n";
     return;
   }
 
-  if (last_distances_[target_vertex] == std::numeric_limits<double>::max()) {
+  if (last_distances_[target_vertex] == std::numeric_limits<double>::max()) 
+  {
     std::cout << "No path from vertex " << start_vertex_ + 1
               << " to vertex " << target_vertex + 1 << "\n";
   } else {
@@ -196,8 +218,10 @@ void GraphApplication::QueryShortestPath() {
 
 void GraphApplication::PrintGraph() {
   std::cout << "\n    Graph Display\n";
-  if (current_graph_type_ == GraphType::kMatrix) {
-    if (matrix_graph_ && !matrix_graph_->IsEmpty()) {
+  if (current_graph_type_ == GraphType::kMatrix) 
+  {
+    if (matrix_graph_ && !matrix_graph_->IsEmpty()) 
+    {
       std::cout << *matrix_graph_;
     } else {
       std::cout << "Graph is empty\n";
@@ -224,7 +248,8 @@ void GraphApplication::ShowMenu() const {
             << (current_heap_type_ == HeapType::kBinary ? "Binary"
                                                         : "Binomial")
             << "\n";
-  if (algorithm_run_ && start_vertex_ >= 0) {
+  if (algorithm_run_ && start_vertex_ >= 0) 
+  {
     std::cout << "  Last run:   Dijkstra from vertex " << start_vertex_ + 1
               << "\n";
   }
@@ -253,86 +278,102 @@ void GraphApplication::Run() {
     ShowMenu();
     std::cin >> choice;
 
-    switch (choice) {
-      case 1: {
-        std::cout << "Select graph type:\n";
-        std::cout << "1. Matrix-based graph\n";
-        std::cout << "2. Adjacency list-based graph\n";
-        std::cout << "Your choice: ";
-        int type;
-        std::cin >> type;
-        if (type == 1) {
-          current_graph_type_ = GraphType::kMatrix;
-          ClearGraphs();
-          std::cout << "Switched to matrix-based graph\n";
-        } else if (type == 2) {
-          current_graph_type_ = GraphType::kList;
-          ClearGraphs();
-          std::cout << "Switched to adjacency list-based graph\n";
-        } else {
-          std::cout << "Invalid choice!\n";
-        }
-        break;
+    switch (choice) 
+    {
+    case 1: 
+    {
+      std::cout << "Select graph type:\n";
+      std::cout << "1. Matrix-based graph\n";
+      std::cout << "2. Adjacency list-based graph\n";
+      std::cout << "Your choice: ";
+      int type;
+      std::cin >> type;
+      if (type == 1) 
+      {
+        current_graph_type_ = GraphType::kMatrix;
+        ClearGraphs();
+        std::cout << "Switched to matrix-based graph\n";
+      } else if (type == 2) {
+        current_graph_type_ = GraphType::kList;
+        ClearGraphs();
+        std::cout << "Switched to adjacency list-based graph\n";
+      } 
+      else 
+      {
+        std::cout << "Invalid choice!\n";
       }
-      case 2: {
-        std::cout << "Select heap type:\n";
-        std::cout << "1. Binary heap\n";
-        std::cout << "2. Binomial heap\n";
-        std::cout << "Your choice: ";
-        int type;
-        std::cin >> type;
-        if (type == 1) {
-          current_heap_type_ = HeapType::kBinary;
-          std::cout << "Switched to binary heap\n";
-        } else if (type == 2) {
-          current_heap_type_ = HeapType::kBinomial;
-          std::cout << "Switched to binomial heap\n";
-        } else {
-          std::cout << "Invalid choice!\n";
-        }
-        algorithm_run_ = false;
-        break;
+      break;
+    }
+    case 2: 
+    {
+      std::cout << "Select heap type:\n";
+      std::cout << "1. Binary heap\n";
+      std::cout << "2. Binomial heap\n";
+      std::cout << "Your choice: ";
+      int type;
+      std::cin >> type;
+      if (type == 1) 
+      {
+        current_heap_type_ = HeapType::kBinary;
+        std::cout << "Switched to binary heap\n";
+      } else if (type == 2) {
+        current_heap_type_ = HeapType::kBinomial;
+        std::cout << "Switched to binomial heap\n";
+      } 
+      else 
+      {
+        std::cout << "Invalid choice!\n";
       }
-      case 3: {
-        int size;
-        std::cout << "Enter number of vertices: ";
-        std::cin >> size;
-        if (size > 0) {
-          CreateGraph(size);
-        } else {
-          std::cout << "Invalid size!\n";
-        }
-        break;
+      algorithm_run_ = false;
+      break;
+    }
+    case 3: 
+    {
+      int size;
+      std::cout << "Enter number of vertices: ";
+      std::cin >> size;
+      if (size > 0) 
+      {
+        CreateGraph(size);
       }
-      case 4:
-        GenerateRandomGraph();
-        break;
-      case 5:
-        AddEdge();
-        break;
-      case 6:
-        RunDijkstra();
-        break;
-      case 7:
-        QueryShortestPath();
-        break;
-      case 8:
-        PrintGraph();
-        break;
-      case 0:
-        std::cout << "Thank you for using the application!\n";
-        break;
-      default:
-        std::cout << "Invalid choice! Please try again.\n";
+      else 
+      {
+        std::cout << "Invalid size!\n";
+      }
+      break;
+    }
+    case 4:
+      GenerateRandomGraph();
+      break;
+    case 5:
+      AddEdge();
+      break;
+    case 6:
+      RunDijkstra();
+      break;
+    case 7:
+      QueryShortestPath();
+      break;
+    case 8:
+      PrintGraph();
+      break;
+    case 0:
+      std::cout << "Thank you for using the application!\n";
+      break;
+    default:
+      std::cout << "Invalid choice! Please try again.\n";
     }
   } while (choice != 0);
 }
 
 int main() {
-  try {
+  try 
+  {
     GraphApplication app;
     app.Run();
-  } catch (const std::exception& e) {
+  } 
+  catch (const std::exception& e) 
+  {
     std::cout << "Fatal error: " << e.what() << "\n";
     return 1;
   }

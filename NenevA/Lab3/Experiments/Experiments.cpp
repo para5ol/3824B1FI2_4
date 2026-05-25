@@ -5,15 +5,18 @@
 #include <memory>
 #include "graph.h"
 #include "adjacency_list.h"
-int main() {
+int main()
+{
   std::cout << "Dijkstra Algorithm Performance Comparison\n";
 
-  struct TestParams {
+  struct TestParams 
+  {
     int vertices; 
     double density;
   };
 
-  std::vector<TestParams> tests = {
+  std::vector<TestParams> tests =
+  {
     {100, 0.5},
     {250, 0.75},
     {500, 0.35},
@@ -22,7 +25,8 @@ int main() {
 
   std::vector<std::vector<double>> results;
 
-  for (const auto& test : tests) {
+  for (const auto& test : tests)
+  {
     std::cout << "Testing graph: " << test.vertices << " vertices, " << test.density * 100 << "% density\n";
 
     Graph matrixGraph;
